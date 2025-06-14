@@ -2,7 +2,7 @@ package org.eliftunc.userservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.eliftunc.userservice.dto.UserRequestDto;
-import org.eliftunc.userservice.dto.UserResponseDto;
+import org.eliftunc.dto.UserResponseDto;
 import org.eliftunc.userservice.entity.User;
 import org.eliftunc.userservice.mapper.UserMapper;
 import org.eliftunc.userservice.repository.UserProjection;

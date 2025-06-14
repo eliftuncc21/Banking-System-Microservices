@@ -1,4 +1,4 @@
-package org.eliftunc.userservice.entity;
+package org.eliftunc.enums;
 
 public enum Role {
     CUSTOMER,

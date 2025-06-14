@@ -1,7 +1,7 @@
 package org.eliftunc.userservice.mapper;
 
 import org.eliftunc.userservice.dto.UserRequestDto;
-import org.eliftunc.userservice.dto.UserResponseDto;
+import org.eliftunc.dto.UserResponseDto;
 import org.eliftunc.userservice.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

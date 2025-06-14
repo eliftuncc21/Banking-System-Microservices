@@ -3,7 +3,7 @@ package org.eliftunc.userservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.eliftunc.userservice.dto.UserRequestDto;
-import org.eliftunc.userservice.dto.UserResponseDto;
+import org.eliftunc.dto.UserResponseDto;
 import org.eliftunc.userservice.repository.UserProjection;
 import org.eliftunc.userservice.service.UserService;
 import org.springframework.data.domain.Page;

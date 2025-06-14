@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.eliftunc.enums.ActiveStatus;
+import org.eliftunc.enums.Gender;
+import org.eliftunc.enums.Role;
 
 import java.time.LocalDate;
 
