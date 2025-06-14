@@ -3,6 +3,7 @@ package org.eliftunc.creditcardservice.service;
 import lombok.RequiredArgsConstructor;
 import org.eliftunc.creditcardservice.dto.CreditCardRequestDto;
 import org.eliftunc.creditcardservice.dto.CreditCardResponseDto;
+import org.eliftunc.creditcardservice.entity.CreditCard;
 import org.eliftunc.creditcardservice.mapper.CreditCardMapper;
 import org.eliftunc.creditcardservice.repository.CreditCardProjection;
 import org.eliftunc.creditcardservice.repository.CreditCardRepository;
@@ -18,7 +19,7 @@ public class CreditCardService {
     private final CreditCardMapper creditCardMapper;
 
     public CreditCardResponseDto createCreditCard(CreditCardRequestDto creditCardRequestDto) {
-        CrediCard card = creditCardMapper.toCreditCard(creditCardRequestDto);
+        CreditCard card = creditCardMapper.toCreditCard(creditCardRequestDto);
         creditCardRepository.save(card);
 
         return creditCardMapper.toCreditCardResponseDto(card);
