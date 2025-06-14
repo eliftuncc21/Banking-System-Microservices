@@ -7,6 +7,11 @@ import org.eliftunc.userservice.entity.User;
 import org.eliftunc.userservice.mapper.UserMapper;
 import org.eliftunc.userservice.repository.UserProjection;
 import org.eliftunc.userservice.repository.UserRepository;
+import org.eliftunc.userservice.utils.Caches;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,22 +23,26 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    @Cacheable(value = Caches.USER, key="#email")
     public UserResponseDto findByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElse(null);
         return userMapper.toUserResponseDto(user);
     }
 
+    @Cacheable(value = Caches.USER, key = "#userId")
     public UserResponseDto getUserById(Long userId){
         User user = userRepository.findById(userId).orElse(null);
         return userMapper.toUserResponseDto(user);
     }
 
+    @Cacheable(value = Caches.USERS, key = "'all'")
     public Page<UserResponseDto> getAllUsers(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         return userRepository.findAll(pageable).map(userMapper::toUserResponseDto);
     }
 
+    @CacheEvict(value = Caches.USERS, allEntries = true)
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
 
         User user = userMapper.toUser(userRequestDto);
@@ -42,6 +51,8 @@ public class UserService {
         return userMapper.toUserResponseDto(user);
     }
 
+    @CachePut(value = Caches.USER, key = "#userId")
+    @CacheEvict(value = Caches.USERS, allEntries = true)
     public UserResponseDto updateUser (UserRequestDto userRequestDto, Long userId){
         User user = userRepository.findById(userId).orElse(null);
         userMapper.updateUser(userRequestDto, user);
@@ -49,6 +60,12 @@ public class UserService {
         return userMapper.toUserResponseDto(user);
     }
 
+    @Caching(
+            evict = {
+                    @CacheEvict(value = Caches.USERS, allEntries = true),
+                    @CacheEvict(value = Caches.USER, key="#userId")
+            }
+    )
     public void deleteUser(Long userId){
         if (!userRepository.existsById(userId)){
             throw new RuntimeException("User not found");
@@ -56,6 +73,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    @Cacheable(value = Caches.USER_BASIC, key = "#userId")
     public UserProjection findByUser(Long userId){
         return userRepository.findProjectionByUserId(userId);
     }
