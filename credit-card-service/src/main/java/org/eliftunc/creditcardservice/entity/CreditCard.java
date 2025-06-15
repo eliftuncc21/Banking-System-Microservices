@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.eliftunc.enums.ActiveStatus;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -49,6 +50,7 @@ public class CreditCard {
     @Column(name = "active_status")
     private ActiveStatus activeStatus;
 
+    @CreationTimestamp
     @Column(name = "created_date")
     private Date createdDate;
 }
