@@ -1,5 +1,6 @@
 package org.eliftunc.paymentservice.mapper;
 
+import org.eliftunc.events.PaymentCreatedEvent;
 import org.eliftunc.paymentservice.dto.PaymentRequestDto;
 import org.eliftunc.paymentservice.dto.PaymentResponseDto;
 import org.eliftunc.paymentservice.entity.Payment;
@@ -13,4 +14,6 @@ public interface PaymentMapper {
 
     @Mapping(target = "source", ignore = true)
     PaymentResponseDto toPaymentResponseDto(Payment payment);
+
+    PaymentCreatedEvent toPaymentCreatedEvent(Payment payment);
 }
