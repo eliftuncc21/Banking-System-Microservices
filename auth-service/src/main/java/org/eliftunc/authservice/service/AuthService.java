@@ -32,6 +32,7 @@ public class AuthService {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                     loginRequestDto.getEmail(), loginRequestDto.getPassword());
             authenticationProvider.authenticate(auth);
+
             UserResponseDto userDto = userServiceClient.getUserByEmail(loginRequestDto.getEmail());
             AuthUserDetails authUserDetails = new AuthUserDetails(userDto, passwordEncoder);
 

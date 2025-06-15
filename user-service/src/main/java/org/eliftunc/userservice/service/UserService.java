@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,7 +46,8 @@ public class UserService {
     @CacheEvict(value = Caches.USERS, allEntries = true)
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
 
-        User user = userMapper.toUser(userRequestDto);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = userMapper.toUser(userRequestDto, encoder);
         userRepository.save(user);
 
         return userMapper.toUserResponseDto(user);
