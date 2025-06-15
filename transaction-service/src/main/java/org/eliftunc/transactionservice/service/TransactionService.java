@@ -30,7 +30,7 @@ public class TransactionService {
             throw new RuntimeException("Insufficient balance for the transaction.");
         }
 
-        Transaction transaction = transactionMapper.toTransacton(transactionRequestDto);
+        Transaction transaction = transactionMapper.toTransaction(transactionRequestDto);
         transactionRepository.save(transaction);
 
         TransactionCreatedEvent event = transactionMapper.toTransactionCreatedEvent(transaction);
