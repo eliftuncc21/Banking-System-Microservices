@@ -187,5 +187,23 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    restart: always
+    depends_on:
+      config-server:
+        condition: service_healthy
+    ports:
+      - "8087:8087"
+    environment:
+      CLOUD_CONFIG_URI: http://config-server:8888
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8086/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   pgdata:
