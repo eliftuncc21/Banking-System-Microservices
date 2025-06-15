@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.eliftunc.dto.UserResponseDto;
 import org.eliftunc.enums.ActiveStatus;
 
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class CreditCardResponseDto {
     private Long cardId;
-    private Long userId;
+    private UserResponseDto user;
     private String cardNumber;
     private Integer cvv;
     private Double cardLimit;

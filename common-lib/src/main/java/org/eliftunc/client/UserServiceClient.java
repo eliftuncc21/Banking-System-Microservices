@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "user-service", url = "http://localhost:8081")
 public interface UserServiceClient {
     @GetMapping("/api/users/{id}")
-    UserResponseDto getUserById(@PathVariable Long id);
+    UserResponseDto getUserById(@PathVariable("id") Long id);
 }

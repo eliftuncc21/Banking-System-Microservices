@@ -1,6 +1,7 @@
 package org.eliftunc.creditcardservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.eliftunc.client.UserServiceClient;
 import org.eliftunc.creditcardservice.dto.CreditCardRequestDto;
 import org.eliftunc.creditcardservice.dto.CreditCardResponseDto;
 import org.eliftunc.creditcardservice.entity.CreditCard;
@@ -22,27 +23,35 @@ import org.springframework.stereotype.Service;
 public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
     private final CreditCardMapper creditCardMapper;
+    private final UserServiceClient userServiceClient;
 
     @CacheEvict(value = Caches.CARDS_CACHE, allEntries = true)
     public CreditCardResponseDto createCreditCard(CreditCardRequestDto creditCardRequestDto) {
         CreditCard card = creditCardMapper.toCreditCard(creditCardRequestDto);
         creditCardRepository.save(card);
 
-        return creditCardMapper.toCreditCardResponseDto(card);
+        CreditCardResponseDto response = creditCardMapper.toCreditCardResponseDto(card);
+        response.setUser(response.getUser());
+        return response;
     }
 
     @Cacheable(value = Caches.CARDS_CACHE, key = "'all'")
     public Page<CreditCardResponseDto> getCreditCard(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return creditCardRepository.findAll(pageable)
-                .map(creditCardMapper::toCreditCardResponseDto);
+        return creditCardRepository.findAll(pageable).map(card->{
+            CreditCardResponseDto response = creditCardMapper.toCreditCardResponseDto(card);
+            response.setUser(response.getUser());
+            return response;
+        });
     }
 
     @Cacheable(value = Caches.CARD_CACHE, key = "#cardId")
     public CreditCardResponseDto getCreditCardById(Long cardId){
-        return creditCardRepository.findById(cardId)
-                .map(creditCardMapper::toCreditCardResponseDto)
-                .orElse(null);
+        return creditCardRepository.findById(cardId).map(card -> {
+            CreditCardResponseDto response = creditCardMapper.toCreditCardResponseDto(card);
+            response.setUser(userServiceClient.getUserById(card.getUserId()));
+            return response;
+        }).orElse(null);
     }
 
     @CachePut(value = Caches.CARD_CACHE, key = "#cardId")
@@ -51,7 +60,9 @@ public class CreditCardService {
         CreditCard card = creditCardRepository.findById(cardId).orElse(null);
         creditCardMapper.updateCreditCard(creditCardRequestDto, card);
         creditCardRepository.save(card);
-        return creditCardMapper.toCreditCardResponseDto(card);
+        CreditCardResponseDto response = creditCardMapper.toCreditCardResponseDto(card);
+        response.setUser(response.getUser());
+        return response;
     }
 
     @Caching(
