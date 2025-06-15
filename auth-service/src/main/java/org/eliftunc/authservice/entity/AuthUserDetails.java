@@ -5,6 +5,7 @@ import org.eliftunc.dto.UserResponseDto;
 import org.eliftunc.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthUserDetails implements UserDetails {
     private final UserResponseDto user;
+    private final PasswordEncoder passwordEncoder;
 
     public Role getRole(){
         return user.getRole();
