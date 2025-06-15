@@ -2,18 +2,12 @@ spring:
   application:
     name: account-service
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/example
-    username: postgres
-    password: 1234
+  config:
+    import: "configserver:"
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-server:
-  port: 8082
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: account-service
+      profile: native
+      enabled: true
