@@ -1,5 +1,6 @@
 package org.eliftunc.accountservice.kafka;
 
+import org.eliftunc.events.PaymentCreatedEvent;
 import org.eliftunc.events.TransactionCreatedEvent;
 import org.eliftunc.kafka.KafkaConsumerConfig;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +20,15 @@ public class ConsumerConfig {
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, TransactionCreatedEvent> kafkaListenerContainerFactory() {
         return kafkaConsumerConfig.kafkaListenerContainerFactory(consumerFactory());
+    }
+
+    @Bean
+    public ConsumerFactory<String, PaymentCreatedEvent> paymentConsumerFactory() {
+        return kafkaConsumerConfig.consumerFactory("account-service-group", PaymentCreatedEvent.class);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, PaymentCreatedEvent> paymentKafkaListenerContainerFactory() {
+        return kafkaConsumerConfig.kafkaListenerContainerFactory(paymentConsumerFactory());
     }
 }
