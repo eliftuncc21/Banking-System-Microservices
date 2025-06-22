@@ -11,3 +11,6 @@ spring:
       name: user-service
       profile: native
       enabled: true
+
+  kafka:
+    bootstrap-servers: localhost:9092

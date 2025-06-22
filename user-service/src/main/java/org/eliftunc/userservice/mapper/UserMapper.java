@@ -1,5 +1,6 @@
 package org.eliftunc.userservice.mapper;
 
+import org.eliftunc.events.UserCreatedEvent;
 import org.eliftunc.userservice.dto.UserRequestDto;
 import org.eliftunc.dto.UserResponseDto;
 import org.eliftunc.userservice.entity.User;
@@ -19,5 +20,7 @@ public interface UserMapper {
 
     @Mapping(target = "userId",ignore = true)
     void updateUser(UserRequestDto userRequestDto, @MappingTarget User user);
+
+    UserCreatedEvent toUserCreatedEvent(User user);
 
 }

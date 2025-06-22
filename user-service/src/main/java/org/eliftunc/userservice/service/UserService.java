@@ -1,6 +1,7 @@
 package org.eliftunc.userservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.eliftunc.events.UserCreatedEvent;
 import org.eliftunc.userservice.dto.UserRequestDto;
 import org.eliftunc.dto.UserResponseDto;
 import org.eliftunc.userservice.entity.User;
@@ -15,6 +16,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final KafkaTemplate<String, UserCreatedEvent> kafkaTemplate;
 
     @Cacheable(value = Caches.USER, key="#email")
     public UserResponseDto findByEmail(String email) {
@@ -49,6 +52,9 @@ public class UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = userMapper.toUser(userRequestDto, encoder);
         userRepository.save(user);
+
+        UserCreatedEvent event = userMapper.toUserCreatedEvent(user);
+        kafkaTemplate.send("user-service", event);
 
         return userMapper.toUserResponseDto(user);
     }
